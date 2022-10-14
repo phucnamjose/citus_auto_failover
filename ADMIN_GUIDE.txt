@@ -1,0 +1,7 @@
+---------------------------------HANDLE CASES------------------------------------------
+
+1. When a data container is removed. Monitor will reject if we create a new one. So:
+ - From monitor, run "pg_autoctl drop node --name {NAME} --force"
+ - Run new container. Then monitor will accept it. We can reuse the mounted volumes.
+
+
