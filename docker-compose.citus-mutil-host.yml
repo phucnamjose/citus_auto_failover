@@ -36,51 +36,80 @@ services:
       - 5432
     command: |
       pg_autoctl create monitor --auth trust --run
+    volumes:
+      - monitor-db:/tmp
 
   coord0a:
     <<: *coordinator
     hostname: coord0a
     command: |
       pg_autoctl create coordinator --name coord0a --run
+    volumes:
+      - coord0a-db:/tmp
 
   coord0b:
     <<: *coordinator
     hostname: coord0b
     command: |
       pg_autoctl create coordinator --name coord0b --run
+    volumes:
+      - coord0b-db:/tmp
 
   worker1a:
     <<: *worker
     hostname: worker1a
     command: |
       pg_autoctl create worker --group 1 --name worker1a --run
+    volumes:
+      - worker1a-db:/tmp
 
   worker1b:
     <<: *worker
     hostname: worker1b
     command: |
       pg_autoctl create worker --group 1 --name worker1b --run
+    volumes:
+      - worker1b-db:/tmp
 
   worker2a:
     <<: *worker
     hostname: worker2a
     command: |
       pg_autoctl create worker --group 2 --name worker2a --run
+    volumes:
+      - worker2a-db:/tmp
 
   worker2b:
     <<: *worker
     hostname: worker2b
     command: |
       pg_autoctl create worker --group 2 --name worker2b --run
+    volumes:
+      - worker2b-db:/tmp
 
   worker3a:
     <<: *worker
     hostname: worker3a
     command: |
       pg_autoctl create worker --group 3 --name worker3a --run
+    volumes:
+      - worker3a-db:/tmp
 
   worker3b:
     <<: *worker
     hostname: worker3b
     command: |
       pg_autoctl create worker --group 3 --name worker3b --run
+    volumes:
+      - worker3b-db:/tmp
+
+volumes:
+  monitor-db:
+  coord0a-db:
+  coord0b-db:
+  worker1a-db:
+  worker1b-db:
+  worker2a-db:
+  worker2b-db:
+  worker3a-db:
+  worker3b-db:
