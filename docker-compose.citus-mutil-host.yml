@@ -3,7 +3,7 @@ version: "3.9"  # optional since v1.27.0
 x-coord: &coordinator
   image: citus_pg15_autofailover:0.1
   environment:
-    PGDATA: /tmp/pgaf
+    PGDATA: /var/lib/postgres/pgaf
     PGUSER: citus
     PGDATABASE: citus
     PG_AUTOCTL_HBA_LAN: true
@@ -14,9 +14,9 @@ x-coord: &coordinator
     - 5432
 
 x-worker: &worker
-  image: citus_pg15_autofailover:0.1 
+  image: citus_pg15_autofailover:0.1
   environment:
-    PGDATA: /tmp/pgaf
+    PGDATA: /var/lib/postgres/pgaf
     PGUSER: citus
     PGDATABASE: citus
     PG_AUTOCTL_HBA_LAN: true
@@ -28,16 +28,16 @@ x-worker: &worker
 
 services:
   monitor:
-    image: citus_pg15_autofailover:0.1 
+    image: citus_pg15_autofailover:0.1
     environment:
-      PGDATA: /tmp/pgaf
+      PGDATA: /var/lib/postgres/pgaf
       PG_AUTOCTL_SSL_SELF_SIGNED: true
     expose:
       - 5432
     command: |
-      pg_autoctl create monitor --auth trust --run
+      pg_autoctl create monitor --hostname monitor --auth trust --run
     volumes:
-      - monitor-db:/tmp
+      - monitor-db:/var/lib/postgres
 
   coord0a:
     <<: *coordinator
@@ -45,7 +45,7 @@ services:
     command: |
       pg_autoctl create coordinator --name coord0a --run
     volumes:
-      - coord0a-db:/tmp
+      - coord0a-db:/var/lib/postgres
 
   coord0b:
     <<: *coordinator
@@ -53,15 +53,16 @@ services:
     command: |
       pg_autoctl create coordinator --name coord0b --run
     volumes:
-      - coord0b-db:/tmp
+      - coord0b-db:/var/lib/postgres
 
   worker1a:
     <<: *worker
     hostname: worker1a
     command: |
       pg_autoctl create worker --group 1 --name worker1a --run
+
     volumes:
-      - worker1a-db:/tmp
+      - worker1a-db:/var/lib/postgres
 
   worker1b:
     <<: *worker
@@ -69,7 +70,7 @@ services:
     command: |
       pg_autoctl create worker --group 1 --name worker1b --run
     volumes:
-      - worker1b-db:/tmp
+      - worker1b-db:/var/lib/postgres
 
   worker2a:
     <<: *worker
@@ -77,7 +78,7 @@ services:
     command: |
       pg_autoctl create worker --group 2 --name worker2a --run
     volumes:
-      - worker2a-db:/tmp
+      - worker2a-db:/var/lib/postgres
 
   worker2b:
     <<: *worker
@@ -85,7 +86,7 @@ services:
     command: |
       pg_autoctl create worker --group 2 --name worker2b --run
     volumes:
-      - worker2b-db:/tmp
+      - worker2b-db:/var/lib/postgres
 
   worker3a:
     <<: *worker
@@ -93,7 +94,7 @@ services:
     command: |
       pg_autoctl create worker --group 3 --name worker3a --run
     volumes:
-      - worker3a-db:/tmp
+      - worker3a-db:/var/lib/postgres
 
   worker3b:
     <<: *worker
@@ -101,7 +102,7 @@ services:
     command: |
       pg_autoctl create worker --group 3 --name worker3b --run
     volumes:
-      - worker3b-db:/tmp
+      - worker3b-db:/var/lib/postgres
 
 volumes:
   monitor-db:
@@ -113,3 +114,4 @@ volumes:
   worker2b-db:
   worker3a-db:
   worker3b-db:
+  
