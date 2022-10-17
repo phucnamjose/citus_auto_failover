@@ -1,7 +1,7 @@
 version: "3.9"  # optional since v1.27.0
 
 x-coord: &coordinator
-  image: citus_pg15_autofailover:0.1
+  image: citus_pg15_autofailover:0.2
   environment:
     PGDATA: /var/lib/postgres/pgaf
     PGUSER: citus
@@ -14,7 +14,7 @@ x-coord: &coordinator
     - 5432
 
 x-worker: &worker
-  image: citus_pg15_autofailover:0.1
+  image: citus_pg15_autofailover:0.2
   environment:
     PGDATA: /var/lib/postgres/pgaf
     PGUSER: citus
@@ -28,7 +28,7 @@ x-worker: &worker
 
 services:
   monitor:
-    image: citus_pg15_autofailover:0.1
+    image: citus_pg15_autofailover:0.2
     environment:
       PGDATA: /var/lib/postgres/pgaf
       PG_AUTOCTL_SSL_SELF_SIGNED: true
