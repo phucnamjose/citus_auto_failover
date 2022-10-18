@@ -1,13 +1,31 @@
 ---------------------------------HANDLE CASES------------------------------------------
 
-# 1. Removed
+# 1. DEPRECATED
 # When a data container is removed. Monitor will reject if we create a new one. So:
 # - From monitor, run "pg_autoctl drop node --name {NAME} --force"
 # - Run new container. Then monitor will accept it. We can reuse the mounted volumes.
 
 2. When monitor stop, start it again.
 3. When any data node stop, start it again.
-4. When all data nodes stop, we have to remove all data node and recreate them again.
-5. When all nodes of a group stop, we have to remove and recreate them again.
 
+# 4. DEPRECATED
+# When all data nodes stop, we have to remove all data node and recreate them again.
 
+# 5. DEPRECATED
+# When all nodes of a group stop, we have to remove and recreate them again.
+
+6. Check whether a node is primary(read-write) or secondary(read-only) by SQL: 
+SELECT pg_is_in_recovery();
+"true" means that node is secondary (in standby mode).
+"false" means that node is primary or single. 
+
+7. Data nodes have no password. Monitor node has password which is "postgres / postgres".
+
+8. If a primary cannot communicate to the monitor it starts checking whether the secondary is 
+still connected. In PostgreSQL, the secondary connection automatically times out after 30 seconds. 
+If last contact with the monitor and the last time a connection from the secondary was observed are 
+both more than 30 seconds in the past, the primary concludes it is on the losing side of a network 
+partition and shuts itself down.
+
+9. When monitor is removed, create it again.
+10. When any data node removed, create it again.
