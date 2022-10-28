@@ -29,3 +29,5 @@ partition and shuts itself down.
 
 9. When monitor is removed, create it again.
 10. When any data node removed, create it again.
+
+11. Need find where the primary node is
